@@ -17,7 +17,7 @@ class StandardPSO():
         self.target_func = target_func
 
         mean = (up + low) / 2
-        std = (up - low) / 6 # 99.5% confidence interval
+        std = (up - low) / 6
         self.particles = np.random.normal(mean, std, [particles, dims])
 
         # truncated
@@ -52,13 +52,16 @@ class StandardPSO():
         self.particles = np.where(self.particles >= self.up, self.up - 0.0001, self.particles)
         self.particles = np.where(self.particles <= self.low, self.low + 0.0001, self.particles)
 
-    def step(self):
+    def compute_speed(self, speed, idx, iters):
+        r1 = uniform(0, 1)
+        r2 = uniform(0, 1)
+
+        return speed + self.c1 * r1 * (self.pbest_vec[idx] - self.particles[idx]) + self.c2 * r2 * (self.gbest_vec - self.particles[idx])
+
+    def step(self, iters):
 
         for idx, speed in enumerate(self.speed):
-            r1 = uniform(0, 1)
-            r2 = uniform(0, 1)
-
-            self.speed[idx] = speed + self.c1 * r1 * (self.pbest_vec[idx] - self.particles[idx]) + self.c2 * r2 * (self.gbest_vec - self.particles[idx])
+            self.speed[idx] = self.compute_speed(speed, idx, iters)
             self.particles[idx] += self.speed[idx]
 
             self.clip()
@@ -67,5 +70,5 @@ class StandardPSO():
 
     def exec(self):
 
-        for _ in range(self.iters):
-            self.step()
+        for i in range(self.iters):
+            self.step(i)
