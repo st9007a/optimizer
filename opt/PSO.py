@@ -5,10 +5,11 @@ from math import inf
 
 class StandardPSO():
 
-    def __init__(self, dims, particles, up, low, c1, c2, target_func):
+    def __init__(self, dims, iters, particles, up, low, c1, c2, target_func):
 
         self.dims = dims
         self.num_particles = particles
+        self.iters = iters
         self.c1 = c1
         self.c2 = c2
         self.up = up
@@ -63,3 +64,8 @@ class StandardPSO():
             self.clip()
 
         self.compute()
+
+    def exec(self):
+
+        for _ in range(self.iters):
+            self.step()
