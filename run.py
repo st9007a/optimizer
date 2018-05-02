@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import numpy as np
+from datetime import datetime
 
 from opt.PSO import StandardPSO
 from bench import *
@@ -7,7 +8,11 @@ from bench import *
 if __name__ == '__main__':
 
     opt = StandardPSO(num_particles = 50, c1 = 0.5, c2 = 0.5)
-    opt.optimize(bench = func2, iters = 5000)
 
+    start = datetime.now()
+    opt.optimize(bench = func4, iters = 1000)
+    end = datetime.now()
+
+    print(str(end - start))
     print(opt.best_val)
     print(opt.best_vec)
