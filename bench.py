@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 from opt.bench import Bench
-from decimal import *
-
-getcontext().prec = 100
 
 def _test_func1(vec):
     m = 1
@@ -12,19 +9,16 @@ def _test_func1(vec):
     return sum(abs(vec)) + m
 
 def _test_func2(vec):
-    total = Decimal(1)
-
-    vec = [Decimal(v) for v in vec]
+    total = 0
 
     for i in range(len(vec)):
-        tmp = Decimal(1)
+        tmp = 0
         for j in range(i):
-            tmp *= vec[j]
+            tmp += vec[j]
 
-        tmp *= tmp
-        total *= tmp
+        total += (tmp ** 2)
 
     return total
 
 func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1)
-func2 = Bench(dims = 10, up = 100, low = -100, func = _test_func2)
+func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2)
