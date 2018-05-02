@@ -13,11 +13,7 @@ def _test_func2(vec):
     total = 0
 
     for i in range(len(vec)):
-        tmp = 0
-        for j in range(i):
-            tmp += vec[j]
-
-        total += (tmp ** 2)
+        total += sum(vec[:i]) ** 2
 
     return total
 
@@ -77,8 +73,6 @@ def _test_func5(vec):
     tmp2 += u(vec[-1], 5, 100, 4)
 
     return 0.1 * (math.sin(3 * math.pi * vec[0]) + tmp1 + (vec[-1] - 1) ** 2 * (1 + math.sin(2 * math.pi * vec[-1]) ** 2)) + tmp2
-
-
 
 func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1)
 func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2)
