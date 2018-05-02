@@ -42,7 +42,7 @@ class StandardPSO():
 
     def compute(self, bench):
         for idx, vec in enumerate(self.particles):
-            eval_val = bench.eval(vec)
+            eval_val = bench.eval(list(vec))
 
             if eval_val < self.pbest_val[idx]:
                 self.pbest_val[idx] = eval_val

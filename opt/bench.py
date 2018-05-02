@@ -9,7 +9,7 @@ class Bench():
         self.low = low
 
     def eval(self, vector):
-        if vector.shape[0] != self.dims:
+        if len(vector) != self.dims:
             raise Exception('Dimension not match.')
 
         return self.func(vector)
