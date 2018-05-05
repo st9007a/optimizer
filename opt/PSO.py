@@ -39,7 +39,7 @@ class StandardPSO():
 
     def compute(self, bench):
         for idx, vec in enumerate(self.particles):
-            score = bench.score(list(vec))
+            score = bench.fitness_func_score(list(vec))
 
             if score < self.pbest_val[idx]:
                 self.pbest_val[idx] = score
