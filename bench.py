@@ -76,8 +76,28 @@ def _test_func5(vec):
 
     return 0.1 * (math.sin(3 * math.pi * vec[0]) + tmp1 + (vec[-1] - 1) ** 2 * (1 + math.sin(2 * math.pi * vec[-1]) ** 2)) + tmp2
 
+def _test_func6(vec):
+
+    a = [
+        [-32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32, -32, -16, 0, 16, 32],
+        [-32, -32, -32, -32, -32, -16, -16, -16, -16, -16, 0, 0, 0, 0, 0, 16, 16, 16, 16, 16, 32, 32, 32, 32, 32],
+    ]
+
+    tmp = 1 / 500
+
+    for j in range (25):
+        s = 0
+
+        for i in range(2):
+            s += (vec[i] - a[i][j]) ** 6
+
+        tmp += 1 / (j + 1 + s)
+
+    return tmp ** (-1)
+
 func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1, optima = 0)
 func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2, optima = 0)
 func3 = Bench(dims = 30, up = 600, low = -600, func = _test_func3, optima = 0)
 func4 = Bench(dims = 30, up = 50, low = -50, func = _test_func4, optima = 0)
 func5 = Bench(dims = 30, up = 50, low = -50, func = _test_func5, optima = 0)
+func6 = Bench(dims = 2, up = 65, low = -65, func = _test_func6, optima = 1)
