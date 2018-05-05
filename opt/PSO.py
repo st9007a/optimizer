@@ -13,10 +13,6 @@ class StandardPSO():
         self.c2 = c2
 
     @property
-    def best_val(self):
-        return self.gbest_val
-
-    @property
     def best_vec(self):
         return self.gbest_vec
 
@@ -43,14 +39,14 @@ class StandardPSO():
 
     def compute(self, bench):
         for idx, vec in enumerate(self.particles):
-            eval_val = bench.eval(list(vec))
+            score = bench.score(list(vec))
 
-            if eval_val < self.pbest_val[idx]:
-                self.pbest_val[idx] = eval_val
+            if score < self.pbest_val[idx]:
+                self.pbest_val[idx] = score
                 self.pbest_vec[idx] = vec
 
-            if eval_val < self.gbest_val:
-                self.gbest_val = eval_val
+            if score < self.gbest_val:
+                self.gbest_val = score
                 self.gbest_vec = vec
 
     def clip(self, bench):

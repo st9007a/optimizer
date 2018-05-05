@@ -4,10 +4,12 @@ import math
 
 def _test_func1(vec):
     m = 1
+    s = 0
     for el in vec:
         m *= abs(el)
+        s += abs(el)
 
-    return sum(abs(vec)) + m
+    return s + m
 
 def _test_func2(vec):
     total = 0
@@ -74,8 +76,8 @@ def _test_func5(vec):
 
     return 0.1 * (math.sin(3 * math.pi * vec[0]) + tmp1 + (vec[-1] - 1) ** 2 * (1 + math.sin(2 * math.pi * vec[-1]) ** 2)) + tmp2
 
-func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1)
-func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2)
-func3 = Bench(dims = 30, up = 600, low = -600, func = _test_func3)
-func4 = Bench(dims = 30, up = 50, low = -50, func = _test_func4)
-func5 = Bench(dims = 30, up = 50, low = -50, func = _test_func5)
+func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1, optima = 0)
+func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2, optima = 0)
+func3 = Bench(dims = 30, up = 600, low = -600, func = _test_func3, optima = 0)
+func4 = Bench(dims = 30, up = 50, low = -50, func = _test_func4, optima = 0)
+func5 = Bench(dims = 30, up = 50, low = -50, func = _test_func5, optima = 0)
