@@ -95,9 +95,26 @@ def _test_func6(vec):
 
     return tmp ** (-1)
 
+def _test_func7(vec):
+
+    a = [0.1957, 0.1947, 0.1735, 0.1600, 0.0844, 0.0627, 0.0456, 0.0342, 0.0342, 0.0235, 0.0246]
+    b = [0.25, 0.5, 1, 2, 4, 6, 8, 10, 12, 14, 16]
+
+    tmp = 0
+    for ai, bi in zip(a, b):
+        tmp += (ai - vec[0] * (bi ** 2 + bi * vec[1]) / bi ** 2 + bi * vec[2] + vec[3]) ** 2
+
+    return tmp
+
+def _test_func8(vec):
+    return 4 * vec[0] ** 2 - 2.1 * vec[0] ** 4 + 1 / 3 * vec[0] ** 6 + vec[0] * vec[1] - 4 * vec[1] ** 2 + 4 * vec[1] ** 4
+
+
 func1 = Bench(dims = 30, up = 10, low = -10, func = _test_func1, optima = 0)
 func2 = Bench(dims = 30, up = 100, low = -100, func = _test_func2, optima = 0)
 func3 = Bench(dims = 30, up = 600, low = -600, func = _test_func3, optima = 0)
 func4 = Bench(dims = 30, up = 50, low = -50, func = _test_func4, optima = 0)
 func5 = Bench(dims = 30, up = 50, low = -50, func = _test_func5, optima = 0)
 func6 = Bench(dims = 2, up = 65, low = -65, func = _test_func6, optima = 1)
+func7 = Bench(dims = 4, up = 5, low = -5, func = _test_func7, optima = 0.0003)
+func8 = Bench(dims = 2, up = 5, low = -5, func = _test_func8, optima = -1.0316)
