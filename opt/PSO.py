@@ -39,7 +39,7 @@ class StandardPSO():
 
     def compute(self, bench):
         for idx, vec in enumerate(self.particles):
-            score = bench.fitness_func_score(list(vec))
+            score = self.fitness_score(bench, list(vec))
 
             if score < self.pbest_val[idx]:
                 self.pbest_val[idx] = score
@@ -55,6 +55,9 @@ class StandardPSO():
 
     def compute_speed(self, speed, idx, iters, r1, r2):
         return speed + self.c1 * r1 * (self.pbest_vec[idx] - self.particles[idx]) + self.c2 * r2 * (self.gbest_vec - self.particles[idx])
+
+    def fitness_score(self, bench, vec):
+        return (bench.eval(vec) - bench.optima) ** 2
 
     def step(self, iters, bench):
 

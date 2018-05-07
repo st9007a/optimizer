@@ -11,6 +11,3 @@ class Bench():
 
     def eval(self, vector):
         return self.func(vector)
-
-    def fitness_func_score(self, vector):
-        return (self.func(vector) - self.optima) ** 2
