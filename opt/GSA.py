@@ -98,7 +98,7 @@ class GSA():
 
         np.clip(self.particles, bench.low, bench.up, out = self.particles)
 
-    def optimize(self, bench, iters):
+    def optimize(self, iters, bench):
 
         self.init(bench)
 
