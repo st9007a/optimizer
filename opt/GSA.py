@@ -7,7 +7,7 @@ from heapq import nlargest
 
 class GSA():
 
-    def __init__(self, num_agents, g, kbest, kbest_decay = 1e-2, g_decay = 1e-2, epsilon = 1e-3):
+    def __init__(self, num_agents, g, kbest, kbest_decay = 1e-2, g_decay = 1e-2, epsilon = 1e-4):
         self.g = g
         self.g_decay = g_decay
         self.kbest = kbest
@@ -32,7 +32,7 @@ class GSA():
         self.speed = np.random.normal(0, 1, [self.num_agents, bench.dims])
 
     def mass_fitness_score(self, bench, vec):
-        score = 1 / (abs(bench.eval(list(vec)) - bench.optima) + 1e-4)
+        score = 1 / (abs(bench.eval(list(vec)) - bench.optima) + self.epsilon)
         # score = -log(abs(bench.eval(list(vec)) - bench.optima) + 1e-4)
 
         if score > self.best_score:
@@ -49,13 +49,9 @@ class GSA():
         mass = 0
 
         for f in self.mass_score:
-            mass += (f - worst + 1e-4) / (best - worst + 1e-4)
+            mass += (f - worst + self.epsilon) / (best - worst)
 
         return mass, best, worst
-
-    def clip(self, bench):
-        self.particles = np.where(self.particles >= bench.up, bench.up - 0.0001, self.particles)
-        self.particles = np.where(self.particles <= bench.low, bench.low + 0.0001, self.particles)
 
     def step(self, iters, bench):
 
@@ -70,7 +66,7 @@ class GSA():
 
         # Update mass
         for i in range(self.num_agents):
-            self.mass[i] = (self.mass_score[i] - worst + 1e-4) / (best - worst + 1e-4) / mass_sum
+            self.mass[i] = (self.mass_score[i] - worst + 1e-4) / (best - worst) / mass_sum
 
         # Calcuate a
         kbest_mass = nlargest(kbest, self.mass)
