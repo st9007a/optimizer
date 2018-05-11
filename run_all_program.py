@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     benchs = [func1, func2, func3, func4, func5, func6, func7, func8]
     PSOOptimizer = StandardPSO(c1 = 0.5, c2 = 0.5, num_particles = 50)
-    GSAOptimizer = GSA(num_agents = 50, g = 9.8, kbest = 40)
+    GSAOptimizer = GSA(num_agents = 50, g = 9.8, kbest = 40, kbest_decay = 3e-3, g_decay = 5e-3)
 
     for idx, b in enumerate(benchs):
         run_program(PSOOptimizer, b, 1000, 'results/PSO_func%d.pkl' % (idx + 1))

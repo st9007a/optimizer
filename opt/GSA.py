@@ -7,7 +7,7 @@ from heapq import nlargest
 
 class GSA():
 
-    def __init__(self, num_agents, g, kbest, kbest_decay = 1e-2, g_decay = 1e-2, epsilon = 1e-4):
+    def __init__(self, num_agents, g, kbest, kbest_decay = 1e-3, g_decay = 1e-2, epsilon = 1e-4):
         self.g = g
         self.g_decay = g_decay
         self.kbest = kbest
@@ -15,14 +15,14 @@ class GSA():
         self.epsilon = epsilon
         self.num_agents = num_agents
 
-        self.mass_score = [0] * num_agents
-        self.mass = [0] * num_agents
+    def init(self, bench):
+        self.history = []
+
+        self.mass_score = [0] * self.num_agents
+        self.mass = [0] * self.num_agents
 
         self.best_vec = None
         self.best_score = -inf
-
-    def init(self, bench):
-        self.history = []
 
         mean = (bench.up + bench.low) / 2
         std = (bench.up - bench.low) / 6
@@ -43,7 +43,7 @@ class GSA():
         if score > self.best_score:
             self.best_score = score
             self.best_vec = list(vec)
-            self.history.append({'iters': iters, 'vec': self.best_vec, 'val': bench.eval(self.best_vec)})
+            self.history.append({'iter': iters, 'vec': self.best_vec, 'val': bench.eval(self.best_vec)})
 
         return score
 
