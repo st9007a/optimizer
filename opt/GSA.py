@@ -22,6 +22,8 @@ class GSA():
         self.best_score = -inf
 
     def init(self, bench):
+        self.history = []
+
         mean = (bench.up + bench.low) / 2
         std = (bench.up - bench.low) / 6
         self.particles = np.random.normal(mean, std, [self.num_agents, bench.dims])
@@ -31,13 +33,17 @@ class GSA():
 
         self.speed = np.random.normal(0, 1, [self.num_agents, bench.dims])
 
-    def mass_fitness_score(self, bench, vec):
-        score = 1 / (abs(bench.eval(list(vec)) - bench.optima) + self.epsilon)
+    def fitness_score(self, bench, vec):
+        return 1 / (abs(bench.eval(list(vec)) - bench.optima) + self.epsilon)
+
+    def compute_mass_score(self, iters, bench, vec):
+        score = self.fitness_score(bench, vec)
         # score = -log(abs(bench.eval(list(vec)) - bench.optima) + 1e-4)
 
         if score > self.best_score:
             self.best_score = score
             self.best_vec = list(vec)
+            self.history.append({'iters': iters, 'vec': self.best_vec, 'val': bench.eval(self.best_vec)})
 
         return score
 
@@ -57,7 +63,7 @@ class GSA():
 
         # Evaluate fitness score
         for idx, pos in enumerate(self.particles):
-            self.mass_score[idx] = self.mass_fitness_score(bench, pos)
+            self.mass_score[idx] = self.compute_mass_score(iters, bench, pos)
 
         # Update G, kbest, best, worst
         g = self.g * (1 - self.g_decay) ** iters
@@ -100,3 +106,16 @@ class GSA():
 
         for i in range(iters):
             self.step(i, bench)
+
+        # Evaluate fitness score
+        for idx, pos in enumerate(self.particles):
+            self.mass_score[idx] = self.compute_mass_score(iters, bench, pos)
+
+    def mean_fitness_last_iter(self, bench):
+        total = 0
+
+        for idx, vec in enumerate(self.particles):
+            score = self.fitness_score(bench, list(vec))
+            total += score
+
+        return total / len(self.particles)

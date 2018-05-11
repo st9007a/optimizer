@@ -17,6 +17,8 @@ class StandardPSO():
         return self.gbest_vec
 
     def init(self, bench):
+        self.history = []
+
         mean = (bench.up + bench.low) / 2
         std = (bench.up - bench.low) / 6
         self.particles = np.random.normal(mean, std, [self.num_particles, bench.dims])
@@ -27,35 +29,36 @@ class StandardPSO():
         self.speed = np.random.normal(0, 1, [self.num_particles, bench.dims])
 
         self.pbest_val = np.zeros([self.num_particles])
-        self.pbest_val.fill(inf)
+        self.pbest_val.fill(-inf)
 
         self.pbest_vec = [None] * self.num_particles
 
-        self.gbest_val = inf
+        self.gbest_val = -inf
         self.gbest_vec = None
 
 
-    def compute(self, bench):
+    def compute(self, iters, bench):
         for idx, vec in enumerate(self.particles):
             score = self.fitness_score(bench, list(vec))
 
-            if score < self.pbest_val[idx]:
+            if score > self.pbest_val[idx]:
                 self.pbest_val[idx] = score
                 self.pbest_vec[idx] = list(vec)
 
-            if score < self.gbest_val:
+            if score > self.gbest_val:
                 self.gbest_val = score
                 self.gbest_vec = list(vec)
+                self.history.append({'iter': iters, 'vec': self.gbest_vec, 'val': bench.eval(self.gbest_vec)})
 
     def compute_speed(self, speed, idx, iters, r1, r2):
         return speed + self.c1 * r1 * (self.pbest_vec[idx] - self.particles[idx]) + self.c2 * r2 * (self.gbest_vec - self.particles[idx])
 
     def fitness_score(self, bench, vec):
-        return (bench.eval(vec) - bench.optima) ** 2
+        return 1 / ((bench.eval(vec) - bench.optima) ** 2 + 1e-4)
 
     def step(self, iters, bench):
 
-        self.compute(bench)
+        self.compute(iters, bench)
 
         for idx, speed in enumerate(self.speed):
             r1 = uniform(0, 1)
@@ -73,3 +76,14 @@ class StandardPSO():
 
         for i in range(iters):
             self.step(i, bench)
+
+        self.compute(iters, bench)
+
+    def mean_fitness_last_iter(self, bench):
+        total = 0
+
+        for idx, vec in enumerate(self.particles):
+            score = self.fitness_score(bench, list(vec))
+            total += score
+
+        return total / len(self.particles)
