@@ -59,15 +59,13 @@ def bin_to_population(bin):
 class GA():
 
     def __init__(self, num_population, crossover_p = 0.8, mutation_p = 0.008):
-        self.history = []
-        
         self.num_population = num_population
         self.crossover_p = crossover_p
         self.mutation_p = mutation_p
 
-        self.populations = []
-
     def init(self, bench):
+        self.history = []
+        self.populations = []
         for _i in range(self.num_population):
             population = list(np.random.uniform(bench.low, bench.up, bench.dims))
             self.populations.append(population)

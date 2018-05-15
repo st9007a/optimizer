@@ -13,7 +13,10 @@ def run_program(optimizer, bench, iters, path):
     mean_fitness_last_iter = []
     history_100_rounds = []
 
+    print('Start ' + path)
+
     for i in range(100):
+        print('Round ' + str(i + 1))
         optimizer.optimize(bench = bench, iters = iters)
 
         history_100_rounds.append(optimizer.history)
