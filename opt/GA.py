@@ -39,7 +39,7 @@ def bin_to_float(b):
         return struct.unpack('d', struct.pack('L', int(b, 2)))[0]
 
 def float_to_bin(f):
-    if FLOAT_DIGIT == 32:    
+    if FLOAT_DIGIT == 32:
         return ''.join(bin(c).replace('0b', '').rjust(8, '0') for c in struct.pack('f', f))
     else:
         return ''.join(bin(c).replace('0b', '').rjust(8, '0') for c in struct.pack('d', f))
@@ -68,12 +68,14 @@ class GA():
         self.populations = []
         for _i in range(self.num_population):
             population = list(np.random.uniform(bench.low, bench.up, bench.dims))
+            for idx, pop in enumerate(population):
+                if isnan(pop):
+                    population[idx] = bench.low
             self.populations.append(population)
         self.scores = [0] * self.num_population
         self.best_population = None
         self.best_score = -inf
         self.next_gen = []
-        
 
     def reproduction(self, bench):
         scores = []
@@ -98,7 +100,7 @@ class GA():
         for idx in range(0, len(l), 2):
             mates[l[idx]] = l[idx + 1]
             mates[l[idx + 1]] = l[idx]
-        
+
         sites = np.random.randint(bench.dims, size=self.num_population)
         for idx, mate in enumerate(mates):
             if have_mate[idx] == True:
@@ -130,7 +132,7 @@ class GA():
                             self.next_gen[mate][genidx] = bench.low
                         elif isnan(num):
                             self.next_gen[mate][genidx] = bench.low
-    
+
     def mutation(self, bench):
         site = np.random.randint(0, bench.dims * FLOAT_DIGIT)
         for idx, _population in enumerate(self.next_gen):
@@ -140,7 +142,11 @@ class GA():
                     a[site] = '1'
                 else:
                     a[site] = '0'
-                self.next_gen[idx] = bin_to_population(''.join(a))
+                population = bin_to_population(''.join(a))
+                for i in range(len(population)):
+                    if isnan(population[i]):
+                        population[i] = bench.low
+                self.next_gen[idx] = population
 
     def migrate(self, bench):
         self.populations = self.populations + self.next_gen
