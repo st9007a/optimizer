@@ -4,6 +4,21 @@
 
 find a input vector X = [x1, x2, ..., xn] let the function f(X) = **optima value**
 
+## Environment
+
+- Ubuntu 16.04
+- Python 3.5.2
+
+## Install package
+
+1. Install python3
+2. Inpstall pip3
+3. Execute command : `pip3 install -r requires.txt`
+
+## Run program
+
+Execute command : `./run_all_program.py`
+
 ## Usage
 
 1. define the function your want to optimize:
