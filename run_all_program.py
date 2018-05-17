@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import pickle
 import numpy as np
 from datetime import datetime
@@ -16,11 +17,12 @@ def run_program(optimizer, bench, iters, path):
     print('Start ' + path)
 
     for i in range(100):
-        print('Round ' + str(i + 1))
         optimizer.optimize(bench = bench, iters = iters)
 
         history_100_rounds.append(optimizer.history)
         mean_fitness_last_iter.append(optimizer.mean_fitness_last_iter(bench))
+
+        print('Round: %d, best so far: %.4f' % (i + 1, optimizer.history[-1]['val']))
 
     res = {
         'history': history_100_rounds,
@@ -32,12 +34,16 @@ def run_program(optimizer, bench, iters, path):
 
     print('Done, save result to ' + path)
 
+
 if __name__ == '__main__':
 
     benchs = [func1, func2, func3, func4, func5, func6, func7, func8]
     GAOpitimizer = GA(num_population = 50, crossover_p = 0.8, mutation_p = 0.008)
     GSAOptimizer = GSA(num_agents = 50, g = 9.8, kbest = 40, kbest_decay = 3e-3, g_decay = 5e-3)
     PSOOptimizer = StandardPSO(c1 = 0.5, c2 = 0.5, num_particles = 50)
+
+    if not os.path.isdir('results'):
+        os.makedirs('results')
 
     for idx, b in enumerate(benchs):
         run_program(GAOpitimizer, b, 1000, 'results/GA_func%d.pkl' % (idx + 1))
